@@ -1,6 +1,7 @@
 package com.example.garacar.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.example.garacar.BookingActivity;
 import com.example.garacar.R;
 import com.example.garacar.models.Product;
 import java.util.List;
@@ -20,8 +22,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     private Context context;
     private List<Product> productList;
-
-
 
     public ProductAdapter(Context context, List<Product> productList) {
         this.context = context;
@@ -39,26 +39,29 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
 
-        // Hiển thị tên, giá, và hình ảnh sản phẩm
+        // Hiển thị thông tin sản phẩm
         holder.productName.setText(product.getName());
         holder.productPrice.setText(String.format("$%.2f", product.getPrice()));
-
-        // Hiển thị hình ảnh sản phẩm
         Glide.with(context)
                 .load(product.getImageUrl())
-                .placeholder(R.drawable.car) // Ảnh mặc định khi tải
+                .placeholder(R.drawable.car)
                 .into(holder.productImage);
-
-        // Hiển thị Rating
         holder.productRating.setRating(product.getRating());
 
-        // Hiển thị thẻ giảm giá nếu có
+        // Hiển thị giảm giá nếu có
         if (product.isDiscounted()) {
             holder.discountLayout.setVisibility(View.VISIBLE);
             holder.discountText.setText(String.format("%d%%", product.getDiscountPercentage()));
         } else {
             holder.discountLayout.setVisibility(View.GONE);
         }
+
+        // Xử lý click để mở BookingActivity, truyền tên dịch vụ
+        holder.cardView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, BookingActivity.class);
+            intent.putExtra("selectedService", product.getName());
+            context.startActivity(intent);
+        });
     }
 
     @Override

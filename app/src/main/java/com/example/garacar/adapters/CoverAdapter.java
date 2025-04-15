@@ -1,6 +1,7 @@
 package com.example.garacar.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.example.garacar.GaraDetailActivity;
 import com.example.garacar.R;
 import com.example.garacar.models.CoverModel;
 import java.util.List;
@@ -36,6 +38,13 @@ public class CoverAdapter extends RecyclerView.Adapter<CoverAdapter.ViewHolder> 
         CoverModel model = coverList.get(position);
         Glide.with(context).load(model.getImageUrl()).into(holder.productImage);
         holder.productNote.setText(model.getNote());
+
+        // Bắt sự kiện click vào nút "check"
+        holder.checkButton.setOnClickListener(v -> {
+            // Chuyển sang GaraDetailActivity
+            Intent intent = new Intent(context, GaraDetailActivity.class);
+            context.startActivity(intent);
+        });
     }
 
     @Override

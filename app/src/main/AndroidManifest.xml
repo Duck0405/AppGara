@@ -15,6 +15,12 @@
         android:theme="@style/Theme.GaraCar"
         tools:targetApi="31">
         <activity
+            android:name=".BookingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".GaraDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".ForgotPasswordActivity"
             android:exported="false" />
         <activity
