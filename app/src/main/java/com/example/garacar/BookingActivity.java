@@ -11,7 +11,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BookingActivity extends AppCompatActivity {
 
@@ -30,16 +32,17 @@ public class BookingActivity extends AppCompatActivity {
         // Ánh xạ View
         initViews();
 
-        // Firebase
-        bookingRef = FirebaseDatabase.getInstance().getReference("bookings");
+        // Khởi tạo Firebase Database
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://gara-77a02-default-rtdb.asia-southeast1.firebasedatabase.app/");
+        bookingRef = database.getReference("bookings");
 
-        // Danh sách dịch vụ
+        // Setup danh sách dịch vụ
         setupServiceDropdown();
 
-        // Date & Time Picker
+        // Setup chọn ngày & giờ
         setupDateTimePickers();
 
-        // Sự kiện nút xác nhận
+        // Bắt sự kiện nút xác nhận
         btnConfirm.setOnClickListener(v -> submitBooking());
     }
 
@@ -100,7 +103,6 @@ public class BookingActivity extends AppCompatActivity {
             return;
         }
 
-        // Dữ liệu đặt lịch
         Map<String, Object> booking = new HashMap<>();
         booking.put("name", name);
         booking.put("phone", phone);
