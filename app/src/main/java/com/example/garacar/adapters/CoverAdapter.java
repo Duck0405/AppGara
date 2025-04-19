@@ -16,7 +16,8 @@ import com.example.garacar.R;
 import com.example.garacar.models.CoverModel;
 import java.util.List;
 
-public class CoverAdapter extends RecyclerView.Adapter<CoverAdapter.ViewHolder> {
+public class CoverAdapter extends RecyclerView.Adapter<CoverAdapter.CoverViewHolder> {
+
     private Context context;
     private List<CoverModel> coverList;
 
@@ -27,22 +28,23 @@ public class CoverAdapter extends RecyclerView.Adapter<CoverAdapter.ViewHolder> 
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Thay đổi layout từ cover_item.xml -> cover_single.xml
+    public CoverViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.cover_single, parent, false);
-        return new ViewHolder(view);
+        return new CoverViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CoverViewHolder holder, int position) {
         CoverModel model = coverList.get(position);
-        Glide.with(context).load(model.getImageUrl()).into(holder.productImage);
-        holder.productNote.setText(model.getNote());
 
-        // Bắt sự kiện click vào nút "check"
-        holder.checkButton.setOnClickListener(v -> {
-            // Chuyển sang GaraDetailActivity
+        Glide.with(context).load(model.getImageUrl()).into(holder.coverImage);
+        holder.coverNote.setText(model.getNote());
+
+        holder.btnViewDetail.setOnClickListener(v -> {
             Intent intent = new Intent(context, GaraDetailActivity.class);
+            intent.putExtra("image", model.getImageUrl());
+            intent.putExtra("note", model.getNote());
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         });
     }
@@ -52,16 +54,19 @@ public class CoverAdapter extends RecyclerView.Adapter<CoverAdapter.ViewHolder> 
         return coverList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView productImage;
-        TextView productNote;
-        Button checkButton;
+    public static class CoverViewHolder extends RecyclerView.ViewHolder {
+        ImageView coverImage;
+        TextView coverNote;
+        Button btnViewDetail;
 
-        public ViewHolder(@NonNull View itemView) {
+        public CoverViewHolder(@NonNull View itemView) {
             super(itemView);
-            productImage = itemView.findViewById(R.id.productImage_coverPage);
-            productNote = itemView.findViewById(R.id.productNoteCover);
-            checkButton = itemView.findViewById(R.id.productCheck_coverPage);
+            coverImage = itemView.findViewById(R.id.productImage_coverPage);
+            coverNote = itemView.findViewById(R.id.productNoteCover);
+            btnViewDetail = itemView.findViewById(R.id.productCheck_coverPage);
         }
     }
 }
+
+
+

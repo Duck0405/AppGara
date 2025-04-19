@@ -9,20 +9,28 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.garacar.adapters.CoverAdapter;
 import com.example.garacar.adapters.ProductAdapter;
 import com.example.garacar.models.CoverModel;
 import com.example.garacar.models.Product;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    private RecyclerView newRecView, saleRecView, coverRecView;
-    private ProductAdapter newAdapter, saleAdapter;
+    private RecyclerView coverRecView, newRecView, saleRecView;
     private CoverAdapter coverAdapter;
-    private List<Product> newProductList, saleProductList;
+    private ProductAdapter newAdapter, saleAdapter;
     private List<CoverModel> coverList;
+    private List<Product> newProductList, saleProductList;
+    private DatabaseReference databaseRef;
 
     @Nullable
     @Override
@@ -34,25 +42,10 @@ public class HomeFragment extends Fragment {
         newRecView = view.findViewById(R.id.newRecView);
         saleRecView = view.findViewById(R.id.saleRecView);
 
-        // Tạo danh sách dữ liệu giả lập
+        // Khởi tạo list rỗng
+        coverList = new ArrayList<>();
         newProductList = new ArrayList<>();
         saleProductList = new ArrayList<>();
-        coverList = new ArrayList<>();
-
-        // Thêm sản phẩm vào danh sách cover
-        coverList.add(new CoverModel("https://cdn.elferspot.com/wp-content/uploads/2019/05/Porsche-911-991-GT3-for-sale--1024x683.jpg", "Porsche 911 Turbo"));
-        coverList.add(new CoverModel("https://hips.hearstapps.com/hmg-prod/images/2024-mercedes-amg-gls63-103-642b777fa7be3.jpg?crop=0.734xw:0.825xh;0.128xw,0.0457xh&resize=768:*", "Audi RSQ8 Performance"));
-
-        // Thêm sản phẩm mới
-        newProductList.add(new Product("Rửa xe & chăm sóc ngoại thất", "https://www.mansory.com/sites/default/files/styles/fullwidth_image_with_custom_ratio/public/2020-11/mansory_audi_rsq8_02.jpg?itok=Chi8jiuP", 29.99, 4.5f, false, 0));
-        newProductList.add(new Product("Chăm sóc nội thất", "https://www.mansory.com/sites/default/files/styles/1170_x_full_box_image/public/2022-11/MANSORY%20GHOST%2001.jpg?itok=NUYR1o_r", 120.00, 4.7f, false, 10));
-        newProductList.add(new Product("Độ xe – nâng cấp tiện nghi", "https://www.mansory.com/sites/default/files/styles/fullwidth_image_with_custom_ratio/public/2020-11/mansory_audi_rsq8_02.jpg?itok=Chi8jiuP", 29.99, 4.5f, false, 0));
-        newProductList.add(new Product("Bảo dưỡng định kỳ", "https://www.mansory.com/sites/default/files/styles/1170_x_full_box_image/public/2022-11/MANSORY%20GHOST%2001.jpg?itok=NUYR1o_r", 120.00, 4.7f, false, 10));
-
-
-        // Thêm sản phẩm giảm giá
-        saleProductList.add(new Product("Rửa xe & chăm sóc ngoại thất", "https://hips.hearstapps.com/hmg-prod/images/2022-range-rover-se-lwb-470-1665593876.jpg?crop=0.603xw:0.676xh;0.282xw,0.324xh&resize=768:*", 19.99, 4.0f, true, 15));
-        saleProductList.add(new Product("Bảo dưỡng định kỳ", "https://hips.hearstapps.com/hmg-prod/images/2023-bmw-x7-xdrive-40i148-641c5b429bee5.jpg?crop=0.570xw:0.641xh;0.205xw,0.313xh&resize=768:*", 89.99, 4.8f, true, 20));
 
         // Khởi tạo Adapter
         coverAdapter = new CoverAdapter(getContext(), coverList);
@@ -64,11 +57,90 @@ public class HomeFragment extends Fragment {
         newRecView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         saleRecView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
-        // Gán Adapter vào RecyclerView
         coverRecView.setAdapter(coverAdapter);
         newRecView.setAdapter(newAdapter);
         saleRecView.setAdapter(saleAdapter);
 
+        // Kết nối Firebase
+        databaseRef = FirebaseDatabase.getInstance("https://gara-77a02-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                .getReference();
+
+
+        // Load dữ liệu từ Firebase
+        loadCovers();
+        loadNewServices();
+        loadSaleServices();
+
         return view;
+    }
+
+    private void loadCovers() {
+        databaseRef.child("Covers").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                coverList.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String imageUrl = dataSnapshot.child("imageUrl").getValue(String.class);
+                    String note = dataSnapshot.child("note").getValue(String.class);
+                    coverList.add(new CoverModel(imageUrl, note));
+                }
+                coverAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // TODO: Handle lỗi nếu cần
+            }
+        });
+    }
+
+    private void loadNewServices() {
+        databaseRef.child("ServicesNew").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                newProductList.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String name = dataSnapshot.child("serviceName").getValue(String.class);
+                    String image = dataSnapshot.child("serviceImage").getValue(String.class);
+                    Double price = dataSnapshot.child("servicePrice").getValue(Double.class);
+
+                    if (name != null && image != null && price != null) {
+                        newProductList.add(new Product(name, image, price, 4.5f, false, 0));
+                    }
+                }
+                newAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // TODO: Handle lỗi nếu cần
+            }
+        });
+    }
+
+    private void loadSaleServices() {
+        databaseRef.child("ServicesSale").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                saleProductList.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String name = dataSnapshot.child("serviceName").getValue(String.class);
+                    String image = dataSnapshot.child("serviceImage").getValue(String.class);
+                    Double price = dataSnapshot.child("servicePrice").getValue(Double.class);
+                    Double discountPercent = dataSnapshot.child("discountPercentage").getValue(Double.class);
+
+                    if (name != null && image != null && price != null && discountPercent != null) {
+                        int discount = (int) (discountPercent * 100);
+                        saleProductList.add(new Product(name, image, price, 4.2f, true, discount));
+                    }
+                }
+                saleAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // TODO: Handle lỗi nếu cần
+            }
+        });
     }
 }

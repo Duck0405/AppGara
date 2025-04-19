@@ -6,11 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.garacar.BookingActivity;
@@ -37,29 +35,25 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        Product product = productList.get(position);
+        Product p = productList.get(position);
 
-        // Hiển thị thông tin sản phẩm
-        holder.productName.setText(product.getName());
-        holder.productPrice.setText(String.format("$%.2f", product.getPrice()));
-        Glide.with(context)
-                .load(product.getImageUrl())
-                .placeholder(R.drawable.car)
-                .into(holder.productImage);
-        holder.productRating.setRating(product.getRating());
+        holder.productName.setText(p.getServiceName());
+        holder.productPrice.setText(String.format("%,.0fđ", p.getServicePrice()));
+        holder.ratingBar.setRating(p.getRating());
 
-        // Hiển thị giảm giá nếu có
-        if (product.isDiscounted()) {
-            holder.discountLayout.setVisibility(View.VISIBLE);
-            holder.discountText.setText(String.format("%d%%", product.getDiscountPercentage()));
+        if (p.isDiscounted()) {
+            holder.discountText.setVisibility(View.VISIBLE);
+            holder.discountText.setText("-" + p.getDiscountPercentage() + "%");
         } else {
-            holder.discountLayout.setVisibility(View.GONE);
+            holder.discountText.setVisibility(View.GONE);
         }
 
-        // Xử lý click để mở BookingActivity, truyền tên dịch vụ
-        holder.cardView.setOnClickListener(v -> {
+        Glide.with(context).load(p.getServiceImage()).into(holder.productImage);
+
+        // 🟡 Khi người dùng click vào sản phẩm
+        holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, BookingActivity.class);
-            intent.putExtra("selectedService", product.getName());
+            intent.putExtra("serviceName", p.getServiceName()); // truyền tên dịch vụ
             context.startActivity(intent);
         });
     }
@@ -70,23 +64,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
-        CardView cardView;
-        ImageView productImage, productAddToFav;
-        TextView productName, productPrice, productBrandName, discountText;
-        RatingBar productRating;
-        LinearLayout discountLayout;
+        ImageView productImage;
+        TextView productName, productPrice, discountText;
+        RatingBar ratingBar;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
-            cardView = itemView.findViewById(R.id.cardView);
             productImage = itemView.findViewById(R.id.productImage_singleProduct);
-            productAddToFav = itemView.findViewById(R.id.productAddToFav_singleProduct);
             productName = itemView.findViewById(R.id.productName_singleProduct);
             productPrice = itemView.findViewById(R.id.productPrice_singleProduct);
-            productBrandName = itemView.findViewById(R.id.productBrandName_singleProduct);
-            productRating = itemView.findViewById(R.id.productRating_singleProduct);
-            discountLayout = itemView.findViewById(R.id.discount_singleProduct);
             discountText = itemView.findViewById(R.id.discountTv_singleProduct);
+            ratingBar = itemView.findViewById(R.id.productRating_singleProduct);
         }
     }
 }
+

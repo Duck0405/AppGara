@@ -59,14 +59,16 @@ public class BookingActivity extends AppCompatActivity {
     }
 
     private void setupServiceDropdown() {
-        String[] services = {"Rửa xe", "Thay dầu", "Bọc ghế da", "Đánh bóng", "Vệ sinh nội thất"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, services);
-        autoService.setAdapter(adapter);
-
-        String selectedService = getIntent().getStringExtra("selectedService");
+        // Lấy tên dịch vụ từ Intent nếu có
+        String selectedService = getIntent().getStringExtra("serviceName");
         if (selectedService != null) {
             autoService.setText(selectedService, false);
         }
+
+        // Nếu không truyền vào thì mặc định là danh sách các dịch vụ có sẵn
+        String[] services = {"Rửa xe", "Thay dầu", "Bọc ghế da", "Đánh bóng", "Vệ sinh nội thất"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, services);
+        autoService.setAdapter(adapter);
     }
 
     private void setupDateTimePickers() {
@@ -97,12 +99,14 @@ public class BookingActivity extends AppCompatActivity {
         String plateNumber = edtPlateNumber.getText().toString().trim();
         String note = edtNote.getText().toString().trim();
 
+        // Kiểm tra dữ liệu đầu vào
         if (name.isEmpty() || phone.isEmpty() || service.isEmpty() || date.isEmpty() || time.isEmpty()
                 || carType.isEmpty() || plateNumber.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Tạo Map để lưu thông tin đặt lịch
         Map<String, Object> booking = new HashMap<>();
         booking.put("name", name);
         booking.put("phone", phone);
@@ -113,16 +117,18 @@ public class BookingActivity extends AppCompatActivity {
         booking.put("plateNumber", plateNumber);
         booking.put("note", note);
 
+        // Lấy ID booking duy nhất từ Firebase
         String bookingId = bookingRef.push().getKey();
         if (bookingId == null) {
             Toast.makeText(this, "Lỗi hệ thống: Không tạo được ID!", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Lưu thông tin booking vào Firebase
         bookingRef.child(bookingId).setValue(booking)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Đặt lịch thành công!", Toast.LENGTH_SHORT).show();
-                    finish();
+                    finish(); // Kết thúc Activity sau khi lưu thành công
                 })
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "Firebase booking failed: ", e);
