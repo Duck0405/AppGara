@@ -103,11 +103,15 @@ public class HomeFragment extends Fragment {
                     String name = dataSnapshot.child("serviceName").getValue(String.class);
                     String image = dataSnapshot.child("serviceImage").getValue(String.class);
                     Double price = dataSnapshot.child("servicePrice").getValue(Double.class);
+                    String desc = dataSnapshot.child("serviceDesc").getValue(String.class);
 
-                    if (name != null && image != null && price != null) {
-                        newProductList.add(new Product(name, image, price, 4.5f, false, 0));
+                    if (name != null && image != null && price != null && desc != null) {
+                        Product product = new Product(name, image, price, 4.5f, false, 0, desc);
+                        product.setServiceDesc(desc);
+                        newProductList.add(product);
                     }
                 }
+
                 newAdapter.notifyDataSetChanged();
             }
 
@@ -128,10 +132,12 @@ public class HomeFragment extends Fragment {
                     String image = dataSnapshot.child("serviceImage").getValue(String.class);
                     Double price = dataSnapshot.child("servicePrice").getValue(Double.class);
                     Double discountPercent = dataSnapshot.child("discountPercentage").getValue(Double.class);
+                    String desc = dataSnapshot.child("serviceDesc").getValue(String.class);
+
 
                     if (name != null && image != null && price != null && discountPercent != null) {
                         int discount = (int) (discountPercent * 100);
-                        saleProductList.add(new Product(name, image, price, 4.2f, true, discount));
+                        saleProductList.add(new Product(name, image, price, 4.2f, true, discount, desc));
                     }
                 }
                 saleAdapter.notifyDataSetChanged();

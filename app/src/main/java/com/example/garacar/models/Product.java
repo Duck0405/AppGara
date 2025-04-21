@@ -7,18 +7,21 @@ public class Product {
     private float rating;
     private boolean isDiscounted;
     private int discountPercentage;
+    private String serviceDesc;
+
 
     public Product() {
         // Firebase cần constructor rỗng
     }
 
-    public Product(String serviceName, String serviceImage, double servicePrice, float rating, boolean isDiscounted, int discountPercentage) {
+    public Product(String serviceName, String serviceImage, double servicePrice, float rating, boolean isDiscounted, int discountPercentage, String serviceDesc) {
         this.serviceName = serviceName;
         this.serviceImage = serviceImage;
         this.servicePrice = servicePrice;
         this.rating = rating;
         this.isDiscounted = isDiscounted;
         this.discountPercentage = discountPercentage;
+        this.serviceDesc = serviceDesc;
     }
 
     public String getServiceName() {
@@ -68,4 +71,13 @@ public class Product {
     public void setDiscountPercentage(int discountPercentage) {
         this.discountPercentage = discountPercentage;
     }
+
+    public String getServiceDesc() {
+        return serviceDesc;
+    }
+
+    public void setServiceDesc(String serviceDesc) {
+        this.serviceDesc = serviceDesc;
+    }
+
 }

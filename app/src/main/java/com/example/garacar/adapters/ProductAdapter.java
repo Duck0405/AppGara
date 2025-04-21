@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.garacar.BookingActivity;
 import com.example.garacar.R;
+import com.example.garacar.ServiceDetailActivity;
 import com.example.garacar.models.Product;
 import java.util.List;
 
@@ -52,8 +54,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         // 🟡 Khi người dùng click vào sản phẩm
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, BookingActivity.class);
-            intent.putExtra("serviceName", p.getServiceName()); // truyền tên dịch vụ
+//            Intent intent = new Intent(context, BookingActivity.class);
+            Intent intent = new Intent(context, ServiceDetailActivity.class);
+            intent.putExtra("serviceName", p.getServiceName());
+            intent.putExtra("serviceImage", p.getServiceImage()); // thêm ảnh
+            intent.putExtra("price", p.getServicePrice());        // thêm giá
+            intent.putExtra("serviceDesc", p.getServiceDesc());
             context.startActivity(intent);
         });
     }
@@ -67,6 +73,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         ImageView productImage;
         TextView productName, productPrice, discountText;
         RatingBar ratingBar;
+        LinearLayout discountContainer;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -75,6 +82,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             productPrice = itemView.findViewById(R.id.productPrice_singleProduct);
             discountText = itemView.findViewById(R.id.discountTv_singleProduct);
             ratingBar = itemView.findViewById(R.id.productRating_singleProduct);
+            discountContainer = itemView.findViewById(R.id.discount_singleProduct);
         }
     }
 }
