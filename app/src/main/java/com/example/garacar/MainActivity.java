@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
                     } else if (item.getItemId() == R.id.shopMenu) {
                         selectedFragment = new ShopFragment();
                     } else if (item.getItemId() == R.id.bagMenu) {
-                        selectedFragment = new BagFragment();
+                        selectedFragment = new BookingHistoryFragment();
                     } else if (item.getItemId() == R.id.favMenu) {
                         selectedFragment = new FavoritesFragment();
                     } else if (item.getItemId() == R.id.profileMenu) {

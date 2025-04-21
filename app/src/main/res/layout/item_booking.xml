@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_margin="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="6dp"
+    android:radius="16dp"
+    android:backgroundTint="#E3F2FD"> <!-- Nền xanh dương nhạt -->
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Header: Dịch vụ + trạng thái -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:weightSum="1"> <!-- Tổng trọng số -->
+
+            <TextView
+                android:id="@+id/tvService"
+                android:text="Dịch vụ: Vệ sinh nội thất"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="#0D47A1"
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btnStatus"
+                android:text="⏳ Chờ xác nhận"
+                android:textAllCaps="false"
+                android:textSize="13sp"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#FFB300"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:gravity="center"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="4dp"
+                android:elevation="2dp" />
+
+        </LinearLayout>
+
+
+        <!-- Ngày giờ -->
+        <TextView
+            android:id="@+id/tvDateTime"
+            android:layout_marginTop="6dp"
+            android:text="Thời gian: 21/04/2025 - 10:00"
+            android:textSize="14sp"
+            android:textColor="#37474F"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- Thông tin xe -->
+        <TextView
+            android:id="@+id/tvCarInfo"
+            android:layout_marginTop="4dp"
+            android:text="Xe: Hyundai Accent - 43A-456.78"
+            android:textSize="14sp"
+            android:textColor="#1B5E20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- Ghi chú -->
+        <TextView
+            android:id="@+id/tvNote"
+            android:layout_marginTop="4dp"
+            android:text="Ghi chú: Làm sạch kỹ sàn xe"
+            android:textSize="13sp"
+            android:textColor="#FF8F00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

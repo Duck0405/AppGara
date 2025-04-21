@@ -1,5 +1,6 @@
 package com.example.garacar;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
@@ -19,6 +20,9 @@ import com.google.firebase.database.*;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 
 public class BookingActivity extends AppCompatActivity {
 
@@ -41,7 +45,16 @@ public class BookingActivity extends AppCompatActivity {
         setupServiceDropdown();
         setupDateTimePickers();
 
-        btnConfirm.setOnClickListener(v -> submitBooking());
+//        btnConfirm.setOnClickListener(v -> submitBooking());
+        btnConfirm.setOnClickListener(view -> {
+            new AlertDialog.Builder(BookingActivity.this)
+                    .setTitle("Xác nhận đặt lịch")
+                    .setMessage("Bạn có chắc chắn muốn đặt lịch với thông tin đã nhập không?")
+                    .setPositiveButton("Xác nhận", (dialog, which) -> submitBooking())
+                    .setNegativeButton("Hủy", null)
+                    .show();
+        });
+
 
         edtPhone.addTextChangedListener(new TextWatcher() {
             boolean isEditing = false;
@@ -267,15 +280,30 @@ public class BookingActivity extends AppCompatActivity {
             Toast.makeText(this, "Ngày giờ đặt lịch phải ở tương lai!", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        // 👉 BỎ CHECK SỐ ĐIỆN THOẠI VÀ BIỂN SỐ
         saveBooking(name, phone, service, date, time, carType, plateNumber, note);
     }
 
 
     private void saveBooking(String name, String phone, String service, String date, String time,
                              String carType, String plateNumber, String note) {
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            Toast.makeText(this, "Không tìm thấy người dùng. Vui lòng đăng nhập lại!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String userId = currentUser.getUid();
+        String bookingId = bookingRef.push().getKey(); // Tạo ID ngẫu nhiên cho mỗi booking
+
+        if (bookingId == null) {
+            Toast.makeText(this, "Lỗi tạo ID đặt lịch. Vui lòng thử lại!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Map<String, Object> booking = new HashMap<>();
+        booking.put("bookingId", bookingId);
+        booking.put("userId", userId);
         booking.put("name", name);
         booking.put("phone", phone);
         booking.put("service", service);
@@ -284,21 +312,17 @@ public class BookingActivity extends AppCompatActivity {
         booking.put("carType", carType);
         booking.put("plateNumber", plateNumber);
         booking.put("note", note);
-
-        String bookingId = bookingRef.push().getKey();
-        if (bookingId == null) {
-            Toast.makeText(this, "Lỗi hệ thống: Không tạo được ID!", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        booking.put("status", "pending"); // pending: đang chờ xác nhận
 
         bookingRef.child(bookingId).setValue(booking)
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(this, "Đặt lịch thành công!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Đặt lịch thành công!", Toast.LENGTH_LONG).show();
                     finish();
                 })
                 .addOnFailureListener(e -> {
-                    Log.e(TAG, "Firebase booking failed: ", e);
-                    Toast.makeText(this, "Lỗi khi đặt lịch! " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "Lỗi khi lưu booking: " + e.getMessage());
+                    Toast.makeText(this, "Lỗi khi lưu đặt lịch. Vui lòng thử lại!", Toast.LENGTH_SHORT).show();
                 });
     }
+
 }
