@@ -58,4 +58,5 @@
     <string name="_05_34">05/34</string>
     <string name="use_as_default_payment_method">Use as default payment method</string>
     <string name="todo">TODO</string>
+    <string name="news_thumbnail">Hình ảnh đại diện của bài viết</string>
 </resources>

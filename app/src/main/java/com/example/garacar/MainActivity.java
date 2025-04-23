@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
                     if (item.getItemId() == R.id.homeMenu) {
                         selectedFragment = new HomeFragment();
                     } else if (item.getItemId() == R.id.shopMenu) {
-                        selectedFragment = new ShopFragment();
+                        selectedFragment = new NewsFragment();
                     } else if (item.getItemId() == R.id.bagMenu) {
                         selectedFragment = new BookingHistoryFragment();
                     } else if (item.getItemId() == R.id.favMenu) {
