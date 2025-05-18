@@ -60,19 +60,26 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // Đăng nhập với Firebase Authentication
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
+
                         Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
 
-                        // Chuyển vào màn hình chính
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        if (email.equals("admin@gmail.com")) {
+                            // Nếu là admin thì vào trang admin
+                            startActivity(new Intent(LoginActivity.this, AdminDashboardActivity.class));
+                        } else {
+                            // Người dùng thường vào MainActivity
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        }
+
                         finish();
                     } else {
                         Toast.makeText(LoginActivity.this, "Lỗi: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
 }

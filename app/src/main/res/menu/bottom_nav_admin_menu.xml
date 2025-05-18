@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_admin_service"
+        android:icon="@drawable/ic_service"
+        android:title="Dịch vụ"/>
+<!--    <item-->
+<!--        android:id="@+id/nav_admin_user"-->
+<!--        android:icon="@drawable/ic_user"-->
+<!--        android:title="Người dùng"/>-->
+    <item
+        android:id="@+id/nav_admin_booking"
+        android:icon="@drawable/ic_booking"
+        android:title="Đặt lịch"/>
+    <item
+        android:id="@+id/nav_admin_news"
+        android:icon="@drawable/ic_news"
+        android:title="Bài viết"/>
+</menu>

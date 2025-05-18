@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
                         selectedFragment = new NewsFragment();
                     } else if (item.getItemId() == R.id.bagMenu) {
                         selectedFragment = new BookingHistoryFragment();
-                    } else if (item.getItemId() == R.id.favMenu) {
-                        selectedFragment = new FavoritesFragment();
+//                    } else if (item.getItemId() == R.id.favMenu) {
+//                        selectedFragment = new FavoritesFragment();
                     } else if (item.getItemId() == R.id.profileMenu) {
                         selectedFragment = new ProfileFragment();
                     }

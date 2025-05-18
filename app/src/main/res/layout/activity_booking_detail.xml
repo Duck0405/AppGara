@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9FAFB"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:padding="20dp"
+        android:elevation="4dp"
+        android:layout_margin="8dp"
+        android:clipToPadding="false"
+        android:backgroundTint="#FFFFFF"
+        android:backgroundTintMode="src_over">
+
+        <!-- Tên khách -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tên khách"
+            android:textSize="14sp"
+            android:textColor="#888888" />
+        <TextView
+            android:id="@+id/tvDetailUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nguyễn Văn A"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#222222"
+            android:layout_marginBottom="16dp" />
+
+        <!-- SĐT -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Số điện thoại"
+            android:textSize="14sp"
+            android:textColor="#888888" />
+        <TextView
+            android:id="@+id/tv_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0123456789"
+            android:textSize="18sp"
+            android:textColor="#444444"
+            android:layout_marginBottom="16dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EEEEEE"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Dịch vụ -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dịch vụ"
+            android:textSize="14sp"
+            android:textColor="#888888" />
+        <TextView
+            android:id="@+id/tvDetailService"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rửa xe cao cấp"
+            android:textSize="18sp"
+            android:textColor="#444444"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Loại xe -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loại xe"
+            android:textSize="14sp"
+            android:textColor="#888888" />
+        <TextView
+            android:id="@+id/tv_car_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sedan"
+            android:textSize="18sp"
+            android:textColor="#444444"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Biển số -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Biển số"
+            android:textSize="14sp"
+            android:textColor="#888888" />
+        <TextView
+            android:id="@+id/tv_plate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="51A-123.45"
+            android:textSize="18sp"
+            android:textColor="#444444"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Thời gian -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ngày - Giờ"
+            android:textSize="14sp"
+            android:textColor="#888888" />
+        <TextView
+            android:id="@+id/tvDetailDateTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20/05/2025 - 14:00"
+            android:textSize="18sp"
+            android:textColor="#444444"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Ghi chú -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ghi chú"
+            android:textSize="14sp"
+            android:textColor="#888888" />
+        <TextView
+            android:id="@+id/tvDetailNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Để xe gần cửa chính"
+            android:textSize="18sp"
+            android:textColor="#444444"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Trạng thái -->
+        <TextView
+            android:id="@+id/tvDetailStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trạng thái: Chờ duyệt"
+            android:textStyle="italic"
+            android:textSize="18sp"
+            android:textColor="#F57C00"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
+</ScrollView>

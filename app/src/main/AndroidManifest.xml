@@ -15,19 +15,25 @@
         android:theme="@style/Theme.GaraCar"
         tools:targetApi="31">
         <activity
+            android:name=".BookingDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminBookingFragment"
+            android:exported="false" />
+        <activity
+            android:name=".AddArticleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddServiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminDashboardActivity"
+            android:exported="false" />
+        <activity
             android:name=".NewsDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".NewsFragment"
-            android:exported="false" />
-        <activity
             android:name=".EditProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".item_booking"
-            android:exported="false" />
-        <activity
-            android:name=".BookingHistoryFragment"
             android:exported="false" />
         <activity
             android:name=".ServiceDetailActivity"

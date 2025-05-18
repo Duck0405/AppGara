@@ -3,14 +3,16 @@ package com.example.garacar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.garacar.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity {
     private EditText nameEt, emailEt, passEt, cPassEt;
@@ -22,17 +24,14 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        // Khởi tạo Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        // Ánh xạ view
         nameEt = findViewById(R.id.nameEt_signUpPage);
         emailEt = findViewById(R.id.emailEt_signUpPage);
         passEt = findViewById(R.id.PassEt_signUpPage);
         cPassEt = findViewById(R.id.cPassEt_signUpPage);
         signUpBtn = findViewById(R.id.signUpBtn_signUpPage);
 
-        // Xử lý sự kiện đăng ký
         signUpBtn.setOnClickListener(view -> registerUser());
     }
 
@@ -42,7 +41,8 @@ public class SignUpActivity extends AppCompatActivity {
         String password = passEt.getText().toString().trim();
         String confirmPassword = cPassEt.getText().toString().trim();
 
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(email) ||
+                TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
             Toast.makeText(this, "Vui lòng điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -57,16 +57,29 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        // Đăng ký tài khoản với Firebase Authentication
+        // Đăng ký với Firebase Auth
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        Toast.makeText(SignUpActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+                        FirebaseUser fUser = mAuth.getCurrentUser();
+                        if (fUser != null) {
+                            String uid = fUser.getUid();
 
-                        // Chuyển qua màn hình đăng nhập
-                        startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
-                        finish();
+                            // Tạo đối tượng user và lưu vào DB
+                            User user = new User(name, email, "", "user", "");
+
+                            FirebaseDatabase.getInstance("https://gara-77a02-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
+                                    .child(uid)
+                                    .setValue(user)
+                                    .addOnSuccessListener(unused -> {
+                                        Toast.makeText(SignUpActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
+                                        finish();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(SignUpActivity.this, "Lỗi lưu thông tin: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
                     } else {
                         Toast.makeText(SignUpActivity.this, "Lỗi: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
